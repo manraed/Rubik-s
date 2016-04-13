@@ -11,7 +11,12 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-
+    void initServo(void) ; 
+    char servo1(int hoek);
+    char servo2(int hoek);
+    char servo3(int hoek); 
+    char servo4(int hoek);
+    
 
 
 
