@@ -15,6 +15,10 @@ extern "C" {
     void initPWM(void);
     void motor1(char richting, int tijd);
     void motor2(char richting, int tijd);
+    void motor1open(void);
+    void motor1toe(void);
+    void motor2open(void);
+    void motor2toe(void);
 
 
 #ifdef	__cplusplus

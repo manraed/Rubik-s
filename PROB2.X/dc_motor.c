@@ -41,7 +41,7 @@ void motor1(char richting, int tijd){
 void motor2(char richting, int tijd){
     if(richting==0){ /* achteruit*/
            LATBbits.LATB3 = 1;
-           CCPR2L = 0b00101000;
+           CCPR2L = 0b00100000;
        }
        else { /* vooruit */
            LATBbits.LATB3 = 0;
@@ -50,5 +50,21 @@ void motor2(char richting, int tijd){
     delay_ms(100*tijd); /* Delay van 100 ms per tijdseenheid*/
     LATBbits.LATB3 = 0; /* Motor afleggen*/
     CCPR2L = 0b00000000;
+}
+
+void motor1open(){
+    motor1(0,3);
+}
+
+void motor1toe(){
+    motor1(1,3);
+}
+
+void motor2open(){
+    motor2(0,3);
+}
+
+void motor2toe(){
+    motor2(1,3);
 }
 
