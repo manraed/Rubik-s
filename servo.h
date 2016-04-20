@@ -26,10 +26,10 @@
 
     void initServo(void);
     void updateServo(void);
-    char servo1(int hoek);
-    char servo2(int hoek);
-    char servo3(int hoek); 
-    char servo4(int hoek);
+    char servo1(int hoek);//TODO
+    char servo2(int hoek);//TODO
+    char servo3(int hoek);//TODO
+    char servo4(int hoek);//TODO
     
 
 #endif  /* SERVO_H */

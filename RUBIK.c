@@ -7,12 +7,16 @@
 #include "dwengoLCD.h"
 #include "dc_motor.h"
 #include "servo.h"
+#include "kleurensensor.h"
 //#include "rotaties.h"
 
 
 
 unsigned char vlag = 0;
+unsigned char kleurTimerState = 0;
+unsigned char kleurTimerVlag = 0;
 char flip = 0;
+int a;
  
 void YourHighPriorityISRCode();
 void YourLowPriorityISRCode();
@@ -45,6 +49,7 @@ void YourHighPriorityISRCode() {
 void YourLowPriorityISRCode() {
     if(PIR1bits.TMR1IF==1){
 
+
         updateServo();
         
         /*if(vlag==0){
@@ -60,6 +65,23 @@ void YourLowPriorityISRCode() {
         PIR1bits.TMR1IF = 0;
         TMR1H = 0b11111111;
         TMR1L = 0b01110001;  
+    }
+
+    if(PIR2bits.TMR3IF==1){
+
+        kleurTimerState++;
+
+        if(kleurTimerVlag == 0 && SENSOR1OUT == 1){
+            frequentie = kleurTimerState * 50;
+            kleurTimerState = 0;
+        }
+        kleurTimerVlag = SENSOR1OUT;
+
+
+        PIR2bits.TMR3IF = 0;
+        TMR3H = 0b11111101;
+        TMR3L = 0b10100111;
+
     }
 }
 
@@ -95,6 +117,7 @@ void main(void) {
     initPWM();
     initLCD();
     initServo();
+    initColorSensor();
     //delay_s(1);
     //motor2(1,3); /* vooruit */
     //delay_s(2);
@@ -120,9 +143,9 @@ void main(void) {
     state2 = 12;
     state3 = 12;
     state4 = 12;
-
+    /*
     clearLCD();
-    for(flip = 1;flip<21;flip++){
+    for(flip = 1;flip<11;flip++){
         printIntToLCD(flip,0,1);
         delay_s(1);
     }
@@ -153,8 +176,9 @@ void main(void) {
     delay_s(1);
     
     state1 = 12;
+     cur */
 
-    clearLCD();
+    /*clearLCD();
     appendStringToLCD("Motor 1 toe");
     motor1toe();
     delay_s(1);
@@ -179,15 +203,29 @@ void main(void) {
     motor2open();
     delay_s(1);
 
-    state2 = 12;
+    state2 = 12;*/
 
 
     while(1){
-        
+
+        clearLCD();
+        for(flip = 1;flip<6;flip++){
+            printIntToLCD(flip,0,1);
+            delay_s(1);
+        }
+
+        clearLCD();
+        appendStringToLCD("Periode gelezen:");
+        a = readIn(0);
+        printIntToLCD(a,1,3);
+        delay_s(2);
+
+        /*
         printIntToLCD(state1,0,1);
         printIntToLCD(state2,0,5);
         printIntToLCD(state3,1,1);
         printIntToLCD(state4,1,5);
+         cur */
 
     }
     
