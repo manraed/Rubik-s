@@ -231,3 +231,8 @@ void main(void) {
     
  }
 
+//Nog te doen voor servo.c
+//TODO Prescaler bits controleren
+//TODO Evt. timer periode aanpassen
+//TODO 16 bit read-writemode nakijken - waarschijnlijk lijn deleten
+

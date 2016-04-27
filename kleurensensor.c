@@ -42,6 +42,7 @@ void initColorSensor(void){
 
 int readIn(int kleur){
 
+    /*Timer 3 aanzetten om de kleuren in te kunnen lezen*/
     T3CONbits.TMR3ON = 1;
 
     /*rood*/
@@ -60,9 +61,11 @@ int readIn(int kleur){
     delay_s(200);*/
     
     /*clear*/
-    LATAbits.LATA2 = 1; //Bepalen welke kleur lezen
+    LATAbits.LATA2 = 1; /*Deze twee bits bepalen welke kleur er ingelezen wordt*/
     LATAbits.LATA3 = 0;
-    delay_ms(10);
+    delay_ms(10); /*Een kleine delay zorgt voor tijd om de kleur in te lezen*/
+    T3CONbits.TMR3ON = 0; /*De timer wordt terug uitgezet om de ingelezen waarde te behouden en om rekenkracht te sparen*/
+
     return frequentie;
     
     /*groen*/

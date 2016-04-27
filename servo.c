@@ -5,37 +5,40 @@
 #include "dwengoBoard.h"
 #include "servo.h"
 
+//D.m.v. deze macro's kunnen de verschillende PWM periodes ingegeven worden die overeenkomen met de juiste hoeken
 #define HOEK0 12
 #define HOEKN90 5
 #define HOEK90 20
 
-
+//Eenmalig initialiseren van de (globale) variabelen die gebruikt worden bij de timer interrupts
 int timervlag = 0;
 char state1 = 15;
 char state2 = 15;
 char state3 = 15;
 char state4 = 15;
 
+/*Deze functie dient eenmalig uitgevoerd te worden bij het opstarten om de pinnen voor de servo's
+  en de timer voor hun bediening te initialiseren*/
 void initServo() {
     
     /* Initialisatie Timer */
     RCONbits.IPEN = 1; /* Interrupt priority enable bit */
-    IPR1bits.TMR1IP = 0 ; 
-    PIE1bits.TMR1IE = 1;
-    INTCONbits.GIE = 1;
-    INTCONbits.PEIE = 1;
-    RCONbits.SBOREN = 0;
-    PIR1bits.TMR1IF = 0;
+    IPR1bits.TMR1IP = 0 ; /*Priority voor de timer interrupt op laag zetten*/
+    PIE1bits.TMR1IE = 1; /*Interrupt enable bit voor timer 1*/
+    INTCONbits.GIE = 1; /*Global interrupt enable bit*/
+    INTCONbits.PEIE = 1; /*Peripheral interrupt enable bit*/
+    RCONbits.SBOREN = 0; /*BOR Software enable bit uizetten - a.h.v. het voorbeeld van practicum 2*/
+    PIR1bits.TMR1IF = 0; /*Timer 1 interrupt flag klaarzetten om de interrupt op te vangen*/
 
-    //T1CONbits.RD16 = 0; /* 16 bit read/write mode uit */
+    //T1CONbits.RD16 = 0; /* 16 bit read/write mode uit*/
 
-    TMR1H = 0b11111111; /* zet timer overflow op 1/10 van 1ms*/
-    TMR1L = 0b01101001; /* buffers voor timer: als die overflowt, vlag gaat op, 105 */
-    T1CONbits.T1CKPS0 = 1;
+    TMR1H = 0b11111111; /* Zet timer overflow op 1/10 van 1ms*/
+    TMR1L = 0b01101001; /* Bij overflow van dit register wordt de TMR1IF flag bit op 1 gezet en de interrupt getriggerd*/
+    T1CONbits.T1CKPS0 = 1; /*Prescaler */
     T1CONbits.T1CKPS1 = 1;
     
     /* Zetten servo-outputs */
-    TRISBbits.RB4 = 0; /* als output maken */
+    TRISBbits.RB4 = 0; /* R4-R7 pinnen zetten als output, voor het sturingssignaal van de servo's */
     TRISBbits.RB5 = 0;
     TRISBbits.RB6 = 0;
     TRISBbits.RB7 = 0;
@@ -49,8 +52,13 @@ void initServo() {
     
     
 }
+
+/*Deze functie dient elke 0.1ms opgeroepen te worden door de timer, en onderhoudt de juiste periode voor het signaal dat
+ naar de servo's gestuurd wordt, a.d.h.v. de waarden opgeslagen in de state-variabelen*/
 void updateServo(void){
+    /*Telkens de functie opgeroepen wordt, wordt de vlag geincrementeerd*/
     timervlag++;
+    /*Wanneer de volle periode van 200*0.1ms = 20ms verlopen is, reset de vlag zich en worden alle outputs hoog gezet*/
     if(timervlag==200){
         SERV1 = 1;
         SERV2 = 1;
@@ -58,42 +66,56 @@ void updateServo(void){
         SERV4 = 1;
         timervlag = 0;
     }
-
+    /*De outputs blijven hoog totdat de waarde in bijhorende state-variabele bereikt is, waarna ze op 0 gezet worden en
+     laag blijven totdat de volgende periode begint.*/
     if(timervlag >= state1) SERV1 = 0;
     if(timervlag >= state2) SERV2 = 0;
     if(timervlag >= state3) SERV3 = 0;
     if(timervlag >= state4) SERV4 = 0;
 }
 
-char servo1(int hoek){
+/*Deze vier functies nemen een hoek als input, en updaten de servo's zo dat ze naar de bijhorende hoek draaien.*/
+char servo1(char hoek){
     switch(hoek){
         case -90: state1 = HOEKN90;
         case 90: state1 = HOEK90;
-        default: state2 = HOEK0;
+        case 0: state1 = HOEK0;
+        default: unsupportedStateError(hoek, 1);
     }
 
 }
 
-char servo2(int hoek){
+char servo2(char hoek){
     switch(hoek){
         case -90: state2 = HOEKN90;
         case 90: state2 = HOEK90;
-        default: state2 = HOEK0;
+        case 0: state2 = HOEK0;
+        default: unsupportedStateError(hoek, 2);
     }
 }
 
-char servo3(int hoek){
+char servo3(char hoek){
     switch(hoek){
         case -90: state3 = HOEKN90;
         case 90: state3 = HOEK90;
-        default: state3 = HOEK0;
+        case 0: state3 = HOEK0;
+        default: unsupportedStateError(hoek, 3);
     }
 }
 
-char servo4(int hoek){
+char servo4(char hoek){
     switch(hoek){
         case -90: state4 = HOEKN90;
         case 90: state4 = HOEK90;
-        default: state4 = HOEK0;
+        case 0: state4 = HOEK0;
+        default: unsupportedStateError(hoek, 4);
     }
+}
+
+/*Deze functie laat weten wanneer de gewenste hoek niet geimplementeerd is in de bovenstaande functies.*/
+void unsupportedStateError(char hoek, char servo){
+    clearLCD();
+    appendStringToLCD("ERROR: Foute hoek bij servoaansturing");
+    printIntToLCD(hoek,1,1);
+    printIntToLCD(servo,1,8);
 }
