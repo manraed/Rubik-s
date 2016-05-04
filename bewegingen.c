@@ -1,14 +1,18 @@
 #include "bewegingen.h"
+#include "servo.h"
 #include <stdio.h>
+#include "dwengoDelay.h"
 
 /* @brief: draait de elementen van het opgegeven vlak in wijzerzin.
  * Dit is een onmogelijke actie met de kubus (enkel bedoeld om de matrix aan te passen)
  * @param:  int vlak: het nummer van het vlak
  *          char matrix[6][9]: de matrix van de kubus
  * @return: void*/
+int i;
+
 void draai_wijzerzin(int vlak, char matrix[6][9]) { 
 	char temp[9];
-	for (int i = 0; i < 9; i++) {
+	for (i = 0; i < 9; i++) {
 		temp[i] = matrix[vlak][i];
 	}
 	matrix[vlak][0] = temp[6];
@@ -29,7 +33,7 @@ void draai_wijzerzin(int vlak, char matrix[6][9]) {
  * @return: void*/
 void draai_tegenwijzerzin(int vlak, char matrix[6][9]) {
 	char temp[9];
-	for (int i = 0; i < 9; i++) {
+	for (i = 0; i < 9; i++) {
 		temp[i] = matrix[vlak][i];
 	}
 	matrix[vlak][0] = temp[2];
@@ -50,7 +54,7 @@ void draai_tegenwijzerzin(int vlak, char matrix[6][9]) {
  * @return: void*/
 void draai_dubbel(int vlak, char matrix[6][9]) { 
 	char temp[9];
-	for (int i = 0; i < 9; i++) {
+	for (i = 0; i < 9; i++) {
 		temp[i] = matrix[vlak][i];
 	}
 	matrix[vlak][0] = temp[8];
@@ -88,39 +92,45 @@ void draai_voor_naar_links(char matrix[6][9]) {
  * @return: void*/
 void draai_onder(char matrix[6][9]) {
     char temp[9];
+    int pos = 8;
     /*DC2 openen
     Servo2 draaien in tegenwijzerzin en servo4 tegelijk in wijzerzin
     DC2 sluiten
     DC1 openen
     Servo2 en 4 terugzetten
     DC1 sluiten*/
+    motor1open();
+    delay_ms(500);
+    servo2(90);
+    delay_ms(500);
+    motor1toe();
+    delay_ms(500);
     motor2open();
     delay_ms(500);
-    servo2(-90);
+    servo2(0);
     servo4(90);
     delay_ms(500);
     motor2toe();
     delay_ms(500);
     motor1open();
     delay_ms(500);
-    servo2(0);
     servo4(0);
     delay_ms(500);
     motor1toe();
-       
+    delay_ms(500);
+
     /*matrix aanpassen*/
-    int pos = 8;
-    for (int i = 0; i < 9; i++) {
+    for (i = 0; i < 9; i++) {
 	temp[i] = matrix[4][i];
 	matrix[4][i] = matrix[0][i];
 	matrix[0][i] = matrix[2][i];
     }
-    for (int i = 0; i < 9; i++) {
+    for (i = 0; i < 9; i++) {
 	matrix[2][i] = matrix[5][pos];
 	pos--;
     }
     pos = 8;
-    for (int i = 0; i < 9; i++) {
+    for (i = 0; i < 9; i++) {
 	matrix[5][i] = temp[pos];
 	pos--;
     }
@@ -134,39 +144,45 @@ void draai_onder(char matrix[6][9]) {
  * @return: void*/
 void draai_boven(char matrix[6][9]) {
 	char temp[9];
+        int pos = 8;
 	/*DC2 openen
 	Servo2 draaien in wijzerzin en servo4 tegelijk in tegenwijzerzin
         DC2 sluiten
         DC1 openen
 	Servo2 en 4 terugzetten
         DC1 sluiten*/
+        motor1open();
+        delay_ms(500);
+        servo2(-90);
+        delay_ms(500);
+        motor1toe();
+        delay_ms(500);
         motor2open();
         delay_ms(500);
-        servo2(90);
+        servo2(0);
         servo4(-90);
         delay_ms(500);
         motor2toe();
         delay_ms(500);
         motor1open();
         delay_ms(500);
-        servo2(0);
         servo4(0);
         delay_ms(500);
         motor1toe();
+        delay_ms(500);
 
 	/*matrix aanpassen*/
-	int pos = 8;
-	for (int i = 0; i < 9; i++) {
+	for (i = 0; i < 9; i++) {
 		temp[i] = matrix[2][i];
 		matrix[2][i] = matrix[0][i];
 		matrix[0][i] = matrix[4][i];
 	}
-	for (int i = 0; i < 9; i++) {
+	for (i = 0; i < 9; i++) {
 		matrix[4][i] = matrix[5][pos];
 		pos--;
 	}
 	pos = 8;
-	for (int i = 0; i < 9; i++) {
+	for (i = 0; i < 9; i++) {
 		matrix[5][i] = temp[pos];
 		pos--;
 	}
@@ -200,7 +216,7 @@ void draai_rechts(char matrix[6][9]) {
         motor2toe();        
 
 	/*matrix aanpassen*/
-	for (int i = 0; i < 9; i++) {
+	for (i = 0; i < 9; i++) {
 		temp[i] = matrix[0][i];
 		matrix[0][i] = matrix[3][i];
 		matrix[3][i] = matrix[5][i];
@@ -223,8 +239,9 @@ void draai_links(char matrix[6][9]) {
 	ServoA en C terugzetten
 	DC2 sluiten*/
         motor1open();
-        delay_ms(500)
-        servo1(-90); servo3(90);
+        delay_ms(500);
+        servo1(-90);
+        servo3(90);
         delay_ms(500);
         motor1toe();
         delay_ms(500);
@@ -235,7 +252,7 @@ void draai_links(char matrix[6][9]) {
         motor2toe();
 	
 	/*matrix aanpassen*/
-	for (int i = 0; i < 9; i++) {
+	for (i = 0; i < 9; i++) {
 		temp[i] = matrix[1][i];
 		matrix[1][i] = matrix[5][i];
 		matrix[5][i] = matrix[3][i];
@@ -255,14 +272,15 @@ void RCW(char matrix[6][9]) {
 	ServoB 90° draaien in tegenwijzerzin
         DC1 sluiten 
         ServoB terugzetten*/
+        servo2(90);
+        delay_ms(500);
         motor1open();
         delay_ms(500);
-        servo2(-90);
+        servo2(0);
         delay_ms(500);
         motor1toe();
         delay_ms(500);
-        servo2(0);
-	
+
 	/*matrix aanpassen*/
 	temp[0] = matrix[5][6];
 	temp[1] = matrix[5][3];
@@ -270,7 +288,7 @@ void RCW(char matrix[6][9]) {
 	matrix[5][0] = matrix[2][8];
 	matrix[5][3] = matrix[2][5];
 	matrix[5][6] = matrix[2][2];
-	for (int i = 0; i < 3; i++) {
+	for (i = 0; i < 3; i++) {
 		matrix[2][2 + 3 * i] = matrix[0][2 + 3 * i];
 		matrix[0][2 + 3 * i] = matrix[4][2 + 3 * i];
 		matrix[4][2 + 3 * i] = temp[i];
@@ -302,7 +320,7 @@ void RCCW(char matrix[6][9]) {
 	matrix[5][6] = matrix[4][2];
 	matrix[5][3] = matrix[4][5];
 	matrix[5][0] = matrix[4][8];
-	for (int i = 0; i < 3; i++) {
+	for (i = 0; i < 3; i++) {
 		matrix[4][2 + 3 * i] = matrix[0][2 + 3 * i];
 		matrix[0][2 + 3 * i] = matrix[2][2 + 3 * i];
 		matrix[2][2 + 3 * i] = temp[i];
@@ -337,7 +355,7 @@ void RCW2(char matrix[6][9]) {
         motor1toe();
         
         /*matrix aanpassen*/
-        for (int i = 0; i < 3; i++) {
+        for (i = 0; i < 3; i++) {
 		temp[i] = matrix[0][2 + 3 * i];
 		temp[i + 3] = matrix[2][2 + 3 * i];
 		matrix[2][2 + 3 * i] = matrix[4][2 + 3 * i];
@@ -378,7 +396,7 @@ void LCW(char matrix[6][9]) {
     matrix[5][8] = matrix[4][0];
     matrix[5][5] = matrix[4][3];
     matrix[5][2] = matrix[4][6];
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
 	matrix[4][3 * i] = matrix[0][3 * i];
 	matrix[0][3 * i] = matrix[2][3 * i];
 	matrix[2][3 * i] = temp[i];
@@ -411,7 +429,7 @@ void LCCW(char matrix[6][9]) {
     matrix[5][8] = matrix[2][0];
     matrix[5][5] = matrix[2][3];
     matrix[5][2] = matrix[2][6];
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
 	matrix[2][3 * i] = matrix[0][3 * i];
 	matrix[0][3 * i] = matrix[4][3 * i];
 	matrix[4][3 * i] = temp[i];
@@ -447,7 +465,7 @@ void LCW2(char matrix[6][9]) {
     motor1toe();
       
     /*matrix aanpassen*/
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
 	temp[i] = matrix[0][3 * i];
 	temp[i + 3] = matrix[2][3 * i];
 	matrix[2][3 * i] = matrix[4][3 * i];
@@ -473,16 +491,17 @@ void FCW(char matrix[6][9]) {
     DC2 sluiten
     ServoC terugzetten
     */
+    servo3(90);
+    delay_ms(500);
     motor2open();
     delay_ms(500);
-    servo3(-90);
+    servo3(0);
     delay_ms(500);
     motor2toe();
     delay_ms(500);
-    servo3(0);
 
     /*matrix aanpassen*/
-    for (int i = 6; i < 9; i++) {
+    for (i = 6; i < 9; i++) {
 	temp[i - 6] = matrix[3][i];
 	matrix[3][i] = matrix[5][i];
 	matrix[5][i] = matrix[1][i];
@@ -510,7 +529,7 @@ void FCCW(char matrix[6][9]) {
     servo3(0);
 
     /*matrix aanpassen*/
-    for (int i = 6; i < 9; i++) {
+    for (i = 6; i < 9; i++) {
 	temp[i - 6] = matrix[0][i];
 	matrix[0][i] = matrix[1][i];
 	matrix[1][i] = matrix[5][i];
@@ -547,7 +566,7 @@ void FCW2(char matrix[6][9]) {
     motor2toe();
     
     /*matrix aanpassen*/
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
     	temp[i] = matrix[0][6 + i];
 	matrix[0][6 + i] = matrix[5][i + 6];
 	matrix[5][6 + i] = temp[i];
@@ -575,7 +594,7 @@ void BCW(char matrix[6][9]) {
     servo1(0);
         
     /*matrix aanpassen*/
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
 	temp[i] = matrix[0][i];
 	matrix[0][i] = matrix[1][i];
 	matrix[1][i] = matrix[5][i];
@@ -602,7 +621,7 @@ void BCCW(char matrix[6][9]) {
     servo1(0);
 
     /*matrix aanpassen*/
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
     	temp[i] = matrix[3][i];
     	matrix[3][i] = matrix[5][i];
 	matrix[5][i] = matrix[1][i];
@@ -639,7 +658,7 @@ void BCW2(char matrix[6][9]) {
     motor2toe();
     
     /*Matrix aanpassen*/
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
 	temp[i] = matrix[0][i];
 	matrix[0][i] = matrix[5][i];
 	matrix[5][i] = temp[i];
