@@ -230,11 +230,11 @@ void maak_wit_kruis(char matrix[6][9]) {
  *		  char b: kleur van blok
  *@return  int: tiental is het vlak van char a, eenheid de positie van char a in het vlak, geeft dus positie van eerst meegegeven kleur terug! */
 int find_edgepiece(char a, char b, char matrix[6][9]){ // geeft vlak en positie terug in een int[2], werkt!
-	
+    int i; int j;
 	int result ; 
 	//edge enkel op pos met oneven indexen zoeken
-	for (int i = 0; i < 6; i++) {
-	for (int j = 1; j < 8; j += 2) {
+	for (i = 0; i < 6; i++) {
+	for (j = 1; j < 8; j += 2) {
 		if (matrix[i][j] == a) { // blokje is kleur a
 			if (i == 0) {
 				if (j == 1) {
@@ -420,7 +420,7 @@ void bringdownedge(int a, int b, char matrix[6][9]) {
  *@param:  char matrix[6][9]: de matrix van de kubus
  *@return void  */
 void solve_corner_pieces(char matrix[6][9]) {
-	int cp1; int cp2; int cp3; int cp4;
+	int cp1; int cp2;
 	/* eerst wit-blauw-rood cornerpiece inschuiven */
 	cp1 = find_corner_piece('W', 'B', 'R', matrix); 
 	if (cp1 / 10 != 0 && cp1 != 10 && cp1 != 16 && cp1 != 26 && cp1 != 28 && cp1 != 32 && cp1 != 38 && cp1 != 40 && cp1 != 42) { // indien cornerpiece vanboven zit
@@ -776,7 +776,6 @@ next:;
 *@param:  char matrix[6][9]: de matrix van de kubus
 *@return int: 1 als er bruikbare gevonden is,0 indien niet  */
 int find_good_edge_piece(char matrix[6][9]) {
-	int check = 0;
 	if (matrix[0][1] != 'Y') {
 		if (matrix[2][7] != 'Y') { return 1; }
 	}
@@ -929,7 +928,6 @@ void omsingelde_hoek(char matrix[6][9]) {
  *@param:  char matrix[6][9]: de matrix van de kubus
  *@return void  */
 void maak_geel_vlak(char matrix[6][9]) {
-	int check = 0;
 	// 3 states:
 start:
 	// state 1: 
@@ -1403,9 +1401,9 @@ void yellow_edges_counter_clockwise(char matrix[6][9]) {
 		  char c: kleur
  *@return int: geeft positie terug van kleur a op dezelfde manier als find_edge_piece  */
 int find_corner_piece(char a, char b, char c, char matrix[6][9]) {
-	int result = 0; // tiental is vlak, eenheid is positie
-	for(int i = 0; i < 6; i++) {
-		for (int j = 0; j < 9; j += 2) { // 4 en 6 iteratie zijn overbodig: corners zijn enkel 0 2 6 8 
+    int i; int j;
+    for(i = 0; i < 6; i++) {
+		for (j = 0; j < 9; j += 2) { // 4 en 6 iteratie zijn overbodig: corners zijn enkel 0 2 6 8 
 			if (matrix[i][j] == 'W' && j!=4) {
 
 				if (i == 0) { // wit ligt in vlak 0
