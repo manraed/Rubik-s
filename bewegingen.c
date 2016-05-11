@@ -86,6 +86,16 @@ void draai_voor_naar_links(char matrix[6][9]) {
     draai_onder(matrix[6][9]);
 }
 
+/* @brief: draait de voorkant van de kubus naar de achterkant en past de matrix aan.
+ * @param:  char matrix[6][9]: de matrix van de kubus
+ * @return: void*/
+void draai_voor_naar_achter(char matrix[6][9]) {
+    draai_boven(matrix[6][9]);
+    draai_boven(matrix[6][9]);
+    draai_links(matrix[6][9]);
+    draai_links(matrix[6][9]);
+}
+
 /* @brief: draait de bovenkant van de kubus naar de voorkant (naar onder toe wanneer je ervoor staat).
  *          en past de matrix aan.
  * @param:  char matrix[6][9]: de matrix van de kubus
@@ -213,7 +223,8 @@ void draai_rechts(char matrix[6][9]) {
         servo1(0);
         servo3(0);
         delay_ms(500);
-        motor2toe();        
+        motor2toe();
+        delay_ms(500);
 
 	/*matrix aanpassen*/
 	for (i = 0; i < 9; i++) {
@@ -250,6 +261,7 @@ void draai_links(char matrix[6][9]) {
         servo1(0); servo3(0);
         delay_ms(500);
         motor2toe();
+        delay_ms(500);
 	
 	/*matrix aanpassen*/
 	for (i = 0; i < 9; i++) {
@@ -312,6 +324,7 @@ void RCCW(char matrix[6][9]) {
         motor1toe();
         delay_ms(500);
         servo2(0);
+        delay_ms(500);
         
 	/*matrix aanpassen*/
 	temp[0] = matrix[5][6];
@@ -353,6 +366,7 @@ void RCW2(char matrix[6][9]) {
         servo2(0);
         delay_ms(500);
         motor1toe();
+        delay_ms(500);
         
         /*matrix aanpassen*/
         for (i = 0; i < 3; i++) {
@@ -388,6 +402,7 @@ void LCW(char matrix[6][9]) {
         motor1toe();
         delay_ms(500);
         servo4(0);
+        delay_ms(500);
 
     /*matrix aanpassen*/
     temp[0] = matrix[5][8];
@@ -421,6 +436,7 @@ void LCCW(char matrix[6][9]) {
     motor1toe();
     delay_ms(500);
     servo4(0);
+    delay_ms(500);
 
     /*matrix aanpassen*/
     temp[0] = matrix[5][8];
@@ -463,6 +479,7 @@ void LCW2(char matrix[6][9]) {
     servo4(0);
     delay_ms(500);
     motor1toe();
+    delay_ms(500);
       
     /*matrix aanpassen*/
     for (i = 0; i < 3; i++) {
@@ -527,6 +544,7 @@ void FCCW(char matrix[6][9]) {
     motor2toe();
     delay_ms(500);
     servo3(0);
+    delay_ms(500);
 
     /*matrix aanpassen*/
     for (i = 6; i < 9; i++) {
@@ -564,6 +582,7 @@ void FCW2(char matrix[6][9]) {
     servo1(0);
     delay_ms(500);
     motor2toe();
+    delay_ms(500);
     
     /*matrix aanpassen*/
     for (i = 0; i < 3; i++) {
@@ -592,6 +611,7 @@ void BCW(char matrix[6][9]) {
     delay_ms(500);
     motor2toe();
     servo1(0);
+    delay_ms(500);
         
     /*matrix aanpassen*/
     for (i = 0; i < 3; i++) {
@@ -619,6 +639,7 @@ void BCCW(char matrix[6][9]) {
     delay_ms(500);
     motor2toe();
     servo1(0);
+    delay_ms(500);
 
     /*matrix aanpassen*/
     for (i = 0; i < 3; i++) {
@@ -656,6 +677,7 @@ void BCW2(char matrix[6][9]) {
     servo1(0);
     delay_ms(500);
     motor2toe();
+    delay_ms(500);
     
     /*Matrix aanpassen*/
     for (i = 0; i < 3; i++) {
@@ -687,6 +709,15 @@ void UCCW(char matrix[6][9]) {
     draai_boven(matrix);
 }
 
+/* @brief: (Up ClokWise Twice) draait de bovenkant van de kubus tweemaal
+ * @param: char matrix[6][9]: de matrix van de kubus
+ * @return: void */
+void UCW2(char matrix[6][9]){
+    draai_onder(matrix);
+    FCW2(matrix);
+    draai_boven(matrix);
+}
+
 /* @brief: (Down ClockWise) draait de onderkant van de kubus in wijzerzin
  * @param:  char matrix[6][9]: de matrix van de kubus
  * @return: void*/
@@ -702,5 +733,14 @@ void DCW(char matrix[6][9]) {
 void DCCW(char matrix[6][9]) {
     draai_boven(matrix);
     FCCW(matrix);
+    draai_onder(matrix);
+}
+
+/* @brief: (Down ClockWise Twice) draait de onderkant van de kubus in tweemaal
+ * @param:  char matrix[6][9]: de matrix van de kubus
+ * @return: void*/
+void DCW2(char matrix[6][9]) {
+    draai_boven(matrix);
+    FCW2(matrix);
     draai_onder(matrix);
 }

@@ -30,6 +30,9 @@ void draai_voor_naar_rechts(char[6][9]);
 /*Voorvlak naar links draaien*/
 void draai_voor_naar_links(char[6][9]);
 
+/*Voorvlak naar achter draaien*/
+void draai_voor_naar_achter(char[6][9]);
+
 /*Kubus naar voor draaien (bovenvlak wordt voorvlak)*/
 void draai_onder(char[6][9]);
 
@@ -84,13 +87,17 @@ void UCW(char[6][9]);
 /*Bovenkant van de kubus in tegenwijzerzin draaien*/
 void UCCW(char[6][9]);
 
+/*Bovenkant van de kubus tweemaal draaien*/
+void UCW2(char[6][9]);
+
 /*Onderkant van de kubus in wijzerzin draaien*/
 void DCW(char[6][9]);
 
 /*Onderkant van de kubus in tegenwijzerzin draaien*/
 void DCCW(char[6][9]);
 
-
+/*Onderkant van de kubus tweemaal draaien*/
+void DCW2(char[6][9]);
 #ifdef	__cplusplus
 }
 #endif
